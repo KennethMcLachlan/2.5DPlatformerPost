@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private float _speed = 5f;
 
     [SerializeField]
-    private float _gravity = 1f;
+    public float _gravity = 1f;
 
     private Vector3 _direction;
 
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     private Animator _anim;
 
     private bool _jumping;
+
 
     private void Start()
     {
@@ -85,5 +86,11 @@ public class Player : MonoBehaviour
 
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void GrabLedge()
+    {
+        _controller.enabled = false;
+        _anim.SetBool("GrabLedge", true);
     }
 }
