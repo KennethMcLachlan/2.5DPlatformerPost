@@ -4,21 +4,8 @@ using UnityEngine;
 
 public class LedgeTrigger : MonoBehaviour
 {
-
-    //private Animator _anim;
-    //private void OnTriggerEnter(Collider other)
-    //{
-
-    //    if (other.tag == "LedgeGrabChecker")
-    //    {
-    //        Player player = GetComponent<Player>();
-    //        _anim = player.GetComponentInChildren<Animator>();
-    //        _anim.SetTrigger("LedgeGrab");
-    //        Debug.Log("Player triggered the thingy");
-    //        player._gravity = 0;
-    //    }
-    //}
-
+    [SerializeField]
+    private Vector3 _handPosition, _standPosition;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("LedgeGrabChecker"))
@@ -27,9 +14,13 @@ public class LedgeTrigger : MonoBehaviour
 
             if (player != null)
             {
-                player.GrabLedge();
+                player.GrabLedge(_handPosition, this);
             }
-
         }
+    }
+
+    public Vector3 GetStandPosition()
+    {
+        return _standPosition;
     }
 }

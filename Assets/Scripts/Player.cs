@@ -2,32 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    private CharacterController _controller;
     
     [SerializeField]
     private float _speed = 5f;
-
     [SerializeField]
-    public float _gravity = 1f;
-
-    private Vector3 _direction;
-
+    private float _gravity = 1f;
     [SerializeField]
     private float _jumpHeight = 10f;
 
-    //Velocity cache
+    private Vector3 _direction;
+
     private float _yVelocity;
-
-    private bool _canDoubleJump;
-
-    private CharacterController _controller;
 
     private Animator _anim;
 
+    private bool _canDoubleJump;
     private bool _jumping;
 
+    private bool _onLedge;
+
+    public LedgeTrigger activeLedge;
 
     private void Start()
     {
@@ -37,6 +36,14 @@ public class Player : MonoBehaviour
     private void Update()
     {
         CalculateMovement();
+
+        if (_onLedge == true)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                _anim.SetBool("ClimbUp", true);
+            }
+        }
     }
 
     private void CalculateMovement()
@@ -47,12 +54,6 @@ public class Player : MonoBehaviour
 
         _anim.SetFloat("Speed", Mathf.Abs(horizontalInput));
 
-        //what direction to face?
-        //if direction on the x is greater than 0
-        //then face right
-        //else
-        //face 
-
         if (horizontalInput != 0)
         {
             Vector3 facing = transform.localEulerAngles;
@@ -60,7 +61,6 @@ public class Player : MonoBehaviour
             transform.localEulerAngles = facing;
         }
         
-
         if (_controller.isGrounded == true)
         {
             if (_jumping == true)
@@ -71,9 +71,8 @@ public class Player : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _yVelocity = _jumpHeight;
-
-                //_anim.SetTrigger("RunningJump");
                 _jumping = true;
+
                 _anim.SetBool("Jumping", _jumping);
 
                 _canDoubleJump = true;
@@ -88,9 +87,24 @@ public class Player : MonoBehaviour
         _controller.Move(velocity * Time.deltaTime);
     }
 
-    public void GrabLedge()
+    public void GrabLedge(Vector3 handPosition, LedgeTrigger currentLedge)
     {
         _controller.enabled = false;
         _anim.SetBool("GrabLedge", true);
+        _anim.SetFloat("Speed", 0.0f);
+        //_anim.SetBool("Jumping", false);
+
+        _onLedge = true;
+
+        transform.position = handPosition;
+        activeLedge = currentLedge;
+    }
+
+    public void ClimbUpComplete()
+    {
+        transform.position = activeLedge.GetStandPosition();
+
+        _anim.SetBool("GrabLedge", false);
+        _controller.enabled = true;
     }
 }
