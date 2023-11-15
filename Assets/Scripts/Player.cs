@@ -17,7 +17,11 @@ public class Player : MonoBehaviour
 
     private Vector3 _direction;
 
+    //Velocity cache
     private float _yVelocity;
+
+    [SerializeField]
+    private float _rollSpeed = 8f;
 
     private Animator _anim;
 
@@ -27,6 +31,8 @@ public class Player : MonoBehaviour
     private bool _onLedge;
 
     public LedgeTrigger activeLedge;
+
+    private bool _isRolling;
 
     private void Start()
     {
@@ -60,23 +66,29 @@ public class Player : MonoBehaviour
             facing.y = _direction.x > 0 ? 0 : 180; ;
             transform.localEulerAngles = facing;
         }
-        
+
         if (_controller.isGrounded == true)
         {
+            _anim.SetBool("IdleJump", false);
+
             if (_jumping == true)
             {
                 _jumping = false;
                 _anim.SetBool("Jumping", _jumping);
             }
+
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 _yVelocity = _jumpHeight;
                 _jumping = true;
 
+                _anim.SetBool("IdleJump", true);
                 _anim.SetBool("Jumping", _jumping);
 
                 _canDoubleJump = true;
             }
+
+
         }
         else
         {
@@ -85,6 +97,7 @@ public class Player : MonoBehaviour
 
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
+
     }
 
     public void GrabLedge(Vector3 handPosition, LedgeTrigger currentLedge)
@@ -92,7 +105,6 @@ public class Player : MonoBehaviour
         _controller.enabled = false;
         _anim.SetBool("GrabLedge", true);
         _anim.SetFloat("Speed", 0.0f);
-        //_anim.SetBool("Jumping", false);
 
         _onLedge = true;
 
@@ -106,5 +118,6 @@ public class Player : MonoBehaviour
 
         _anim.SetBool("GrabLedge", false);
         _controller.enabled = true;
+        _anim.SetBool("ClimbUp", false);
     }
 }
