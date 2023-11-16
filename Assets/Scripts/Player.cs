@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     private CharacterController _controller;
+
+    private UIManager _uiManager;
     
     [SerializeField]
     private float _speed = 5f;
@@ -34,10 +37,19 @@ public class Player : MonoBehaviour
 
     private bool _isRolling;
 
+    [SerializeField]
+    private int _collectable;
+
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
         _anim = GetComponentInChildren<Animator>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+        if (_uiManager == null)
+        {
+            Debug.Log("UIManager is NULL");
+        }
     }
     private void Update()
     {
@@ -69,6 +81,7 @@ public class Player : MonoBehaviour
 
         if (_controller.isGrounded == true)
         {
+            //_yVelocity = 0;
             _anim.SetBool("IdleJump", false);
 
             if (_jumping == true)
@@ -88,6 +101,7 @@ public class Player : MonoBehaviour
                 _canDoubleJump = true;
             }
 
+            
 
         }
         else
@@ -119,5 +133,17 @@ public class Player : MonoBehaviour
         _anim.SetBool("GrabLedge", false);
         _controller.enabled = true;
         _anim.SetBool("ClimbUp", false);
+    }
+
+    public void AddCollectable()
+    {
+        _collectable ++;
+        _uiManager.UpdateCollectableDisplay(_collectable);
+    }
+
+    public void OnPlayerDeath()
+    {
+        transform.position = new Vector3(95.1f, 68.96f, 0);
+        _yVelocity = 0.0f;
     }
 }
