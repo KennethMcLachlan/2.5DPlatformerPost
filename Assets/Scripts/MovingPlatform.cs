@@ -39,6 +39,7 @@ public class MovingPlatform : MonoBehaviour
         if (other.tag == "Player")
         {
             other.transform.parent = gameObject.transform;
+            Debug.Log("Player is parented to the movingplatform");
         }
     }
 

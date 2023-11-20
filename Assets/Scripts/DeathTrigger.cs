@@ -11,7 +11,7 @@ public class DeathTrigger : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Player player = other.GetComponent<Player>();
+            Player player = other.transform.GetComponent<Player>();
 
             if (player != null)
             {

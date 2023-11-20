@@ -49,6 +49,7 @@ public class Elevator : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            Debug.Log("Player is parented");
             other.transform.parent = this.transform;
         }
     }

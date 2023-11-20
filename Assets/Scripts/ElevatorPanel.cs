@@ -42,23 +42,4 @@ public class ElevatorPanel : MonoBehaviour
         _elevator.ActivateElevator();
     }
 
-
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.E) /* && Bool B == true*/)
-    //    {
-    //        //Bool A == true
-    //    }
-    //}
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    // if tag == PLayer
-
-    //    //Bool B = true
-
-    //    // if Bool A = true
-    //    //RunCode
-    //}
 }
