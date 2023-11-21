@@ -18,9 +18,6 @@ public class Elevator : MonoBehaviour
 
     public bool _elevatorIsActive;
 
-    private void Start()
-    {
-    }
     private void FixedUpdate()
     {
         if (_elevatorIsActive == true)

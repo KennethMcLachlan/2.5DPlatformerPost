@@ -22,6 +22,9 @@ public class Player : MonoBehaviour
 
     private Vector3 _verticalDirection;
 
+    [SerializeField]
+    private GameObject _rollTeleport;
+
     //Velocity cache
     private float _yVelocity;
 
@@ -50,8 +53,6 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _ladderSpeed = 3.0f;
 
-    //[SerializeField]
-    //private GameObject _ledgeCheckerContainer;
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -74,11 +75,16 @@ public class Player : MonoBehaviour
                 _anim.SetBool("ClimbUp", true);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            DodgeRoll();
+        }
     }
 
     private void CalculateMovement()
     {
-        if (_isOnLadder == false)
+        if (_isOnLadder == false && _isRolling == false)
         {
             HorizontalMovement();
         }
@@ -87,7 +93,6 @@ public class Player : MonoBehaviour
         {
             VerticalMovement();
         }
-
     }
 
     private void HorizontalMovement()
@@ -107,7 +112,6 @@ public class Player : MonoBehaviour
 
         if (_controller.isGrounded == true)
         {
-            //_yVelocity = 0;
             _anim.SetBool("IdleJump", false);
 
             if (_jumping == true)
@@ -124,7 +128,6 @@ public class Player : MonoBehaviour
                 _anim.SetBool("IdleJump", true);
                 _anim.SetBool("Jumping", _jumping);
             }
-
         }
         else
         {
@@ -156,8 +159,6 @@ public class Player : MonoBehaviour
             _anim.speed = 0;
         }
         else _anim.speed = 1;
-
-
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -198,60 +199,52 @@ public class Player : MonoBehaviour
 
     public void OnPlayerDeath()
     {
-        //_ledgeCheckerContainer.gameObject.SetActive(false);
         transform.position = new Vector3(95.1f, 68.96f, 0);
         _yVelocity = 0.0f;
     }
-
-    //public void OnPlayerRespawn()
-    //{
-    //    _ledgeCheckerContainer.gameObject.SetActive(true);
-    //}
 
     public void OnLadder()
     {
         _isOnLadder = true;
         Debug.Log("OnLadder() is active");
         _anim.SetBool("ClimbUpLadder", true);
+        _anim.SetBool("ClimbLadder", true);
+        
     }
-
-    //public void OffLadder(Vector3 playerPosition, LadderEnter currentLadderTop)
-    //{
-    //    _isOnLadder = false;
-    //    _anim.speed = 1;
-    //    _controller.enabled = false;
-    //    transform.position = playerPosition;
-    //    activeLadder = currentLadderTop;
-
-    //    //transform.position = activeLadder.TopOfPosition();
-    //    _anim.SetBool("GetOffLadder", true);
-    //    Debug.Log("Off Ladder ran whole");
-    //    //StartCoroutine(ExitLadderRoutine());
-    //}
 
     public void OffLadder()
     {
         _isOnLadder = false;
+        _anim.speed = 1;
+        Debug.Log("Player is off the Ladder");
         _anim.SetBool("ClimbLadder", false);
+        _anim.SetBool("ClimbUpLadder", false);
+        _anim.SetBool("ClimbDownLadder", false);
     }
 
-    //public void OffLadderComplete()
-    //{
-    //    transform.position = activeLadder.TopOfPosition();
-    //    _controller.enabled = true;
-    //    Debug.Log("OffLadderComplete was called");
-        
-    //    _anim.SetBool("ClimbUpLadder", false);
-    //    _anim.SetBool("ClimbDownLadder", false);
-    //    _anim.SetBool("GetOffLadder", false);
-    //}
+    private void DodgeRoll()
+    {
+        _anim.SetBool("Roll", true);
+        _isRolling = true;
 
+        if (_isRolling == true)
+        {
+            _controller.enabled = false;
+            //transform.position = _rollTeleport.transform.position;
+            //_isRolling = false;
+            StartCoroutine(DodgeWait());
+        }
+        //transform.position = Vector3.MoveTowards(transform.position, _rollTeleport, _rollSpeed * Time.deltaTime);
+        //transform.position = _rollTeleport.transform.position;
+        //StartCoroutine(DodgeWait());
+    }
 
-    //IEnumerator ExitLadderRoutine()
-    //{
-    //    yield return new WaitForSeconds(2.0f);
-    //    _controller.enabled = true;
-        
-        
-    //}
+    IEnumerator DodgeWait()
+    {
+        yield return new WaitForSeconds(1.2f);
+        transform.position = _rollTeleport.transform.position;
+        _anim.SetBool("Roll", false);
+        _isRolling = false;
+        _controller.enabled = true;
+    }
 }

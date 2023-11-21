@@ -27,13 +27,30 @@ public class ElevatorPanel : MonoBehaviour
             StartCoroutine(ElevatorPause());
         }
     }
-    private void OnTriggerStay(Collider other)
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (other.tag == "Player")
+    //    {
+    //        _inTriggerZone = true;
+    //        Debug.Log("In Trigger Zone = true");
+    //    }
+    //    else _inTriggerZone = false; Debug.Log("Is not in trigger Zone");
+    //}
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
             _inTriggerZone = true;
         }
-        else _inTriggerZone = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            _inTriggerZone = false;
+        }
     }
 
     IEnumerator ElevatorPause()

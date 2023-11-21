@@ -21,10 +21,8 @@ public class LadderEnter : MonoBehaviour
             if (player != null)
             {
                 player.OnLadder();
-                Debug.Log("Player is on the ladder");
             }
         }
-       
     }
 
     private void OnTriggerExit(Collider other)
@@ -35,16 +33,9 @@ public class LadderEnter : MonoBehaviour
 
             if (player != null)
             {
-                //_startPosition = _playerPosition.transform.position;
-                //player.OffLadder(_startPosition, this);
                 player.OffLadder();
             }
         }
     }
 
-    public Vector3 TopOfPosition()
-    {
-        Debug.Log("TopOfPosition() Ran");
-        return _endPosition.transform.position;
-    }
 }
