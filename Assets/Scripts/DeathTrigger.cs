@@ -15,7 +15,7 @@ public class DeathTrigger : MonoBehaviour
 
             if (player != null)
             {
-                player.OnPlayerDeath();
+                player.OnPlayerFall();
             }
         }
 
@@ -32,7 +32,7 @@ public class DeathTrigger : MonoBehaviour
 
     IEnumerator CCEnableRoutine(CharacterController controller)
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.25f);
         controller.enabled = true;
     }
 }

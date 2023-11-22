@@ -6,6 +6,8 @@ public class ElevatorPanel : MonoBehaviour
 {
     private Elevator _elevator;
 
+    private Player _player;
+
     [SerializeField]
     private MeshRenderer _display;
 
@@ -14,13 +16,17 @@ public class ElevatorPanel : MonoBehaviour
 
     private bool _inTriggerZone;
 
+    [SerializeField]
+    private int _requiredPowerCells = 5;
+
     private void Start()
     {
         _elevator = GameObject.Find("ElevatorContainer").GetComponent<Elevator>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _inTriggerZone == true)
+        if (Input.GetKeyDown(KeyCode.E) && _inTriggerZone == true && _player.PowerCellTally() >= _requiredPowerCells)
         {
             _display.material.color = Color.green;
             _text.SetActive(true);

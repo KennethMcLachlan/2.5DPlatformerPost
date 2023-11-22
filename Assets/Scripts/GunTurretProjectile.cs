@@ -10,6 +10,11 @@ public class GunTurretProjectile : MonoBehaviour
     [SerializeField]
     private float _missileLifeTime = 10.0f;
 
+    [SerializeField]
+    private GameObject _explosion;
+
+    private bool _setExplosion;
+
     void Start()
     {
     }
@@ -22,8 +27,30 @@ public class GunTurretProjectile : MonoBehaviour
     public void FireMissile()
     {
         transform.Translate(Vector3.left * _missileSpeed * Time.deltaTime);
+        Invoke("Explosion", _missileLifeTime);
         Destroy(gameObject, _missileLifeTime);
-        Debug.Log("MissileFired");
     }
-    
+
+    private void Explosion()
+    {
+        Instantiate(_explosion, transform.position, Quaternion.identity);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Player player = other.GetComponent<Player>();
+
+        if (other.tag == "Player")
+        {
+            if (player != null)
+            {
+                Debug.Log("Player was hit");
+                player.PlayerDamage();
+                Explosion();
+                
+            }
+            Destroy(gameObject);
+        }
+    }
+
 }

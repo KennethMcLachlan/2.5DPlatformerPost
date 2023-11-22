@@ -8,6 +8,9 @@ public class GunTurret : MonoBehaviour
     private GameObject _missile;
 
     [SerializeField]
+    private GameObject _smoke;
+
+    [SerializeField]
     private float _canFire = -1f;
 
     [SerializeField]
@@ -31,5 +34,6 @@ public class GunTurret : MonoBehaviour
     private void SpawnMissile()
     {
         Instantiate(_missile, transform.position + new Vector3(-2.0f, 1.34f, 0.0f), Quaternion.identity);
+        Instantiate(_smoke, transform.position + new Vector3 (-1.45f, 1.297f, 0.0f), Quaternion.Euler (0, -90, 0));
     }
 }

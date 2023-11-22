@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -41,6 +40,11 @@ public class Player : MonoBehaviour
 
     private bool _isRolling;
 
+    [SerializeField]
+    private int _lives = 3;
+
+    private bool _playerIsDead;
+
 
     [SerializeField]
     private int _collectable;
@@ -53,11 +57,20 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _ladderSpeed = 3.0f;
 
+    
+    private GameManager _gameManager;
+
+    private bool _playerHit;
+
+    
+
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
         _anim = GetComponentInChildren<Animator>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        
 
         if (_uiManager == null)
         {
@@ -66,33 +79,41 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        CalculateMovement();
-
-        if (_onLedge == true)
+        if (_playerIsDead == false)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (_playerHit == false)
             {
-                _anim.SetBool("ClimbUp", true);
-            }
-        }
+                CalculateMovement();
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            DodgeRoll();
+                if (_onLedge == true)
+                {
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        _anim.SetBool("ClimbUp", true);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.LeftShift))
+                {
+                    DodgeRoll();
+                }
+
+            }
+
         }
     }
 
     private void CalculateMovement()
     {
-        if (_isOnLadder == false && _isRolling == false)
-        {
-            HorizontalMovement();
-        }
+            if (_isOnLadder == false && _isRolling == false)
+            {
+                HorizontalMovement();
+            }
 
-        if (_isOnLadder == true)
-        {
-            VerticalMovement();
-        }
+            if (_isOnLadder == true)
+            {
+                VerticalMovement();
+            }
     }
 
     private void HorizontalMovement()
@@ -197,8 +218,15 @@ public class Player : MonoBehaviour
         _uiManager.UpdateCollectableDisplay(_collectable);
     }
 
-    public void OnPlayerDeath()
+    public int PowerCellTally()
     {
+        return _collectable;
+    }
+
+    public void OnPlayerFall()
+    {
+        _lives--;
+        _uiManager.UpdateLives(_lives);
         transform.position = new Vector3(95.1f, 68.96f, 0);
         _yVelocity = 0.0f;
     }
@@ -230,13 +258,8 @@ public class Player : MonoBehaviour
         if (_isRolling == true)
         {
             _controller.enabled = false;
-            //transform.position = _rollTeleport.transform.position;
-            //_isRolling = false;
             StartCoroutine(DodgeWait());
         }
-        //transform.position = Vector3.MoveTowards(transform.position, _rollTeleport, _rollSpeed * Time.deltaTime);
-        //transform.position = _rollTeleport.transform.position;
-        //StartCoroutine(DodgeWait());
     }
 
     IEnumerator DodgeWait()
@@ -246,5 +269,43 @@ public class Player : MonoBehaviour
         _anim.SetBool("Roll", false);
         _isRolling = false;
         _controller.enabled = true;
+    }
+
+    public void PlayerDamage()
+    {
+        _lives--;
+        _uiManager.UpdateLives(_lives);
+        _playerHit = true;
+        _anim.SetBool("PlayerHit", true);
+        StartCoroutine(PlayerHitRoutine());
+
+
+        if (_lives < 1)
+        {
+            _anim.SetTrigger("PlayerDeath");
+            _controller.enabled = false;
+            _playerIsDead = true;
+            _gameManager.GameOver();
+            StartCoroutine(DeathRoutine());
+        }
+
+        //if (_lives < 1 && Input.GetKeyDown(KeyCode.Return))
+        //{
+        //    SceneManager.LoadScene(0);
+        //}
+    }
+
+    IEnumerator DeathRoutine()
+    {
+        yield return new WaitForSeconds(5);
+        _uiManager.GameOver();
+    }
+
+    IEnumerator PlayerHitRoutine()
+    {
+        yield return new WaitForSeconds(1.2f);
+        _anim.SetBool("PlayerHit", false);
+        _playerHit = false;
+        Debug.Log("PlayerHitROutine played through");
     }
 }
