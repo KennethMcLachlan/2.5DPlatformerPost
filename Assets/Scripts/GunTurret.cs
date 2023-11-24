@@ -16,10 +16,13 @@ public class GunTurret : MonoBehaviour
     [SerializeField]
     private float _fireRate = 3.0f;
 
-    //public GunTurretProjectile _missile;
+    [SerializeField]
+    AudioSource _cannonAudio;
+
+
     void Start()
     {
-        //_missile = GetComponent<GunTurretProjectile>();
+        _cannonAudio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -33,6 +36,7 @@ public class GunTurret : MonoBehaviour
 
     private void SpawnMissile()
     {
+        _cannonAudio.Play();
         Instantiate(_missile, transform.position + new Vector3(-2.0f, 1.34f, 0.0f), Quaternion.identity);
         Instantiate(_smoke, transform.position + new Vector3 (-1.45f, 1.297f, 0.0f), Quaternion.Euler (0, -90, 0));
     }

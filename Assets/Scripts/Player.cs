@@ -62,15 +62,18 @@ public class Player : MonoBehaviour
 
     private bool _playerHit;
 
-    
+    [SerializeField]
+    private GameObject _footstepAudio;
 
+    [SerializeField]
+    AudioSource _batteryPickUp;
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
         _anim = GetComponentInChildren<Animator>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        
+        _batteryPickUp = GetComponent<AudioSource>();
 
         if (_uiManager == null)
         {
@@ -126,10 +129,25 @@ public class Player : MonoBehaviour
 
         if (horizontalInput != 0)
         {
+
             Vector3 facing = transform.localEulerAngles;
             facing.y = _direction.x > 0 ? 0 : 180; ;
             transform.localEulerAngles = facing;
+
+            if (_jumping == false)
+            {
+                _footstepAudio.SetActive(true);
+            }
+            else if (_jumping == true)
+            {
+                _footstepAudio.SetActive(false);
+            }
         }
+        else if (horizontalInput == 0)
+        {
+            _footstepAudio.SetActive(false);
+        }
+        
 
         if (_controller.isGrounded == true)
         {
@@ -214,6 +232,7 @@ public class Player : MonoBehaviour
 
     public void AddCollectable()
     {
+        _batteryPickUp.Play();
         _collectable ++;
         _uiManager.UpdateCollectableDisplay(_collectable);
     }
@@ -233,6 +252,7 @@ public class Player : MonoBehaviour
 
     public void OnLadder()
     {
+        _footstepAudio.SetActive(false);
         _isOnLadder = true;
         Debug.Log("OnLadder() is active");
         _anim.SetBool("ClimbUpLadder", true);
@@ -288,11 +308,6 @@ public class Player : MonoBehaviour
             _gameManager.GameOver();
             StartCoroutine(DeathRoutine());
         }
-
-        //if (_lives < 1 && Input.GetKeyDown(KeyCode.Return))
-        //{
-        //    SceneManager.LoadScene(0);
-        //}
     }
 
     IEnumerator DeathRoutine()

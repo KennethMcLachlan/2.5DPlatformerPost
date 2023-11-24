@@ -48,7 +48,12 @@ public class UIManager : MonoBehaviour
         _employeeText.text = "If you bring me 10 power cells, I'll let you use the ladder.";
         yield return new WaitForSeconds(3);
 
-        //if power cell count > 10 Set Ladder to active
-        //else
+        _employeeText.text = "Press 'Enter' to pay up.";
+
+    }
+
+    public void EndEmployeeConvo()
+    {
+        StopCoroutine(EmployeeConvoRoutine());
     }
 }

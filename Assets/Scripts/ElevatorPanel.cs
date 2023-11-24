@@ -19,6 +19,12 @@ public class ElevatorPanel : MonoBehaviour
     [SerializeField]
     private int _requiredPowerCells = 5;
 
+    [SerializeField]
+    private GameObject _panelSFX;
+
+    [SerializeField]
+    private GameObject _elevatorSFX;
+
     private void Start()
     {
         _elevator = GameObject.Find("ElevatorContainer").GetComponent<Elevator>();
@@ -26,22 +32,15 @@ public class ElevatorPanel : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && _inTriggerZone == true && _player.PowerCellTally() >= _requiredPowerCells)
+        if (Input.GetKeyDown(KeyCode.Return) && _inTriggerZone == true && _player.PowerCellTally() >= _requiredPowerCells)
         {
+            _elevatorSFX.SetActive(true);
+            _panelSFX.SetActive(true);
             _display.material.color = Color.green;
             _text.SetActive(true);
             StartCoroutine(ElevatorPause());
         }
     }
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    if (other.tag == "Player")
-    //    {
-    //        _inTriggerZone = true;
-    //        Debug.Log("In Trigger Zone = true");
-    //    }
-    //    else _inTriggerZone = false; Debug.Log("Is not in trigger Zone");
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
