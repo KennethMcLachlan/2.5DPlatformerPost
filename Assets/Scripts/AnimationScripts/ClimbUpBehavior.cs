@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ClimbUpBehavior : StateMachineBehaviour
 {
-    
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{
@@ -26,7 +26,7 @@ public class ClimbUpBehavior : StateMachineBehaviour
         {
             player.ClimbUpComplete();
         }
-        
+
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

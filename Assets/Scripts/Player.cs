@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     AudioSource _batteryPickUp;
+
     private void Start()
     {
         _controller = GetComponent<CharacterController>();
@@ -108,15 +109,15 @@ public class Player : MonoBehaviour
 
     private void CalculateMovement()
     {
-            if (_isOnLadder == false && _isRolling == false)
-            {
-                HorizontalMovement();
-            }
+        if (_isOnLadder == false && _isRolling == false)
+        {
+            HorizontalMovement();
+        }
 
-            if (_isOnLadder == true)
-            {
-                VerticalMovement();
-            }
+        if (_isOnLadder == true)
+        {
+            VerticalMovement();
+        }
     }
 
     private void HorizontalMovement()
@@ -142,6 +143,8 @@ public class Player : MonoBehaviour
             {
                 _footstepAudio.SetActive(false);
             }
+
+            
         }
         else if (horizontalInput == 0)
         {
@@ -173,6 +176,7 @@ public class Player : MonoBehaviour
             _yVelocity -= _gravity;
         }
 
+        
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
     }
@@ -322,5 +326,10 @@ public class Player : MonoBehaviour
         _anim.SetBool("PlayerHit", false);
         _playerHit = false;
         Debug.Log("PlayerHitROutine played through");
+    }
+
+    public void EndMovement()
+    {
+        _footstepAudio.SetActive(false);
     }
 }

@@ -17,6 +17,16 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI _employeeText;
 
+    [SerializeField]
+    private GameObject _missionAccomplished;
+
+    private GameManager _gameManager;
+
+    private void Start()
+    {
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+    }
+
     public void UpdateCollectableDisplay(int collectable)
     {
         _collectableText.text = "x" + collectable.ToString("00");
@@ -55,5 +65,11 @@ public class UIManager : MonoBehaviour
     public void EndEmployeeConvo()
     {
         StopCoroutine(EmployeeConvoRoutine());
+    }
+
+    public void MissionAccomplished()
+    {
+        _missionAccomplished.SetActive(true);
+        _gameManager.GameOver();
     }
 }

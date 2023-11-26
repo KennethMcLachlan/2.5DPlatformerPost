@@ -17,7 +17,6 @@ public class GunTurretProjectile : MonoBehaviour
 
     void Start()
     {
-        
     }
 
     void Update()
@@ -27,7 +26,6 @@ public class GunTurretProjectile : MonoBehaviour
 
     public void FireMissile()
     {
-        
         transform.Translate(Vector3.left * _missileSpeed * Time.deltaTime);
         Invoke("Explosion", _missileLifeTime);
         Destroy(gameObject, _missileLifeTime);
