@@ -332,4 +332,10 @@ public class Player : MonoBehaviour
     {
         _footstepAudio.SetActive(false);
     }
+
+    public void Heal()
+    {
+        _lives ++;
+        _uiManager.UpdateLives(_lives);
+    }
 }

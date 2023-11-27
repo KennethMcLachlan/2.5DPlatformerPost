@@ -22,8 +22,12 @@ public class PayToPassTrigger : MonoBehaviour
     [SerializeField]
     private GameObject _employeeThanks;
 
+    [SerializeField]
+    private AudioSource _sfx;
+
     private void Start()
     {
+        _sfx = GetComponent<AudioSource>();
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         _player = GameObject.Find("Player").GetComponent<Player>();
     }
@@ -35,6 +39,7 @@ public class PayToPassTrigger : MonoBehaviour
             _ladderTrigger.SetActive(true);
             _employeeConvo.SetActive(false);
             _employeeThanks.SetActive(true);
+            _sfx.Play();
             Debug.Log("ladder trigger is set to true");
         }
     }

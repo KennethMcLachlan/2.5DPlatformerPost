@@ -52,7 +52,7 @@ MonoBehaviour:
   _missileSpeed: 8
   _missileLifeTime: 10
   _explosion: {fileID: 1892078723244562, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
-  _explosionSound: {fileID: 5260462102308912632, guid: 6ac24f596ed094d48936683c09ba6cbf, type: 3}
+  explosionSFX: {fileID: 8300000, guid: e7cc0ce96a6a5bb43aa029ebb3bd95d8, type: 3}
 --- !u!65 &1144234042338492153
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -89,12 +89,12 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4545522008033309910}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: e7cc0ce96a6a5bb43aa029ebb3bd95d8, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

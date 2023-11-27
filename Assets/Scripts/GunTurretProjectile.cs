@@ -15,8 +15,14 @@ public class GunTurretProjectile : MonoBehaviour
 
     private bool _setExplosion;
 
+    //[SerializeField]
+    //AudioSource _explosionSFX;
+
+    public AudioClip explosionSFX;
+
     void Start()
     {
+        //_explosionSFX = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -34,6 +40,7 @@ public class GunTurretProjectile : MonoBehaviour
     private void Explosion()
     {
         Instantiate(_explosion, transform.position, Quaternion.identity);
+        AudioSource.PlayClipAtPoint(explosionSFX, transform.position);
     }
 
     private void OnTriggerEnter(Collider other)
