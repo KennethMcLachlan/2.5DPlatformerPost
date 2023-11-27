@@ -17,17 +17,18 @@ public class DeathTrigger : MonoBehaviour
             {
                 player.OnPlayerFall();
             }
+
+
+            CharacterController controller = other.GetComponent<CharacterController>();
+
+            if (controller != null)
+            {
+                controller.enabled = false;
+            }
+
+            other.transform.position = _respawnPoint.transform.position;
+            StartCoroutine(CCEnableRoutine(controller));
         }
-
-        CharacterController controller = other.GetComponent<CharacterController>();
-
-        if (controller != null)
-        {
-            controller.enabled = false;
-        }
-
-        other.transform.position = _respawnPoint.transform.position;
-        StartCoroutine(CCEnableRoutine(controller));
     }
 
     IEnumerator CCEnableRoutine(CharacterController controller)

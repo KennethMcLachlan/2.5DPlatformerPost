@@ -173,7 +173,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _yVelocity -= _gravity;
+            _yVelocity -= _gravity * Time.deltaTime;
         }
 
         
@@ -310,6 +310,7 @@ public class Player : MonoBehaviour
             _controller.enabled = false;
             _playerIsDead = true;
             _gameManager.GameOver();
+            _uiManager.GameOver();
             StartCoroutine(DeathRoutine());
         }
     }
